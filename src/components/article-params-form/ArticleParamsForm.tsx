@@ -15,10 +15,13 @@ import {
 	fontColors,
 	backgroundColors,
 	contentWidthArr,
+	ArticleStateType,
 } from 'src/constants/articleProps';
 
 export const ArticleParamsForm = () => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [formOptions, setFormOptions] =
+		useState<ArticleStateType>(defaultArticleState);
 
 	function handleClick() {
 		setIsOpen(!isOpen);
@@ -43,29 +46,44 @@ export const ArticleParamsForm = () => {
 					</Text>
 					<Select
 						options={fontFamilyOptions}
-						selected={defaultArticleState.fontFamilyOption}
+						selected={formOptions.fontFamilyOption}
+						onChange={(option) => {
+							setFormOptions({ ...formOptions, fontFamilyOption: option });
+						}}
 						title='Шрифт'
 					/>
 					<RadioGroup
 						name='fontSize'
 						options={fontSizeOptions}
-						selected={defaultArticleState.fontSizeOption}
+						selected={formOptions.fontSizeOption}
+						onChange={(option) => {
+							setFormOptions({ ...formOptions, fontSizeOption: option });
+						}}
 						title='Размер шрифта'
 					/>
 					<Select
 						options={fontColors}
-						selected={defaultArticleState.fontColor}
+						selected={formOptions.fontColor}
+						onChange={(option) => {
+							setFormOptions({ ...formOptions, fontColor: option });
+						}}
 						title='Цвет шрифта'
 					/>
 					<Separator />
 					<Select
 						options={backgroundColors}
-						selected={defaultArticleState.backgroundColor}
+						selected={formOptions.backgroundColor}
+						onChange={(option) => {
+							setFormOptions({ ...formOptions, backgroundColor: option });
+						}}
 						title='Цвет фона'
 					/>
 					<Select
 						options={contentWidthArr}
-						selected={defaultArticleState.contentWidth}
+						selected={formOptions.contentWidth}
+						onChange={(option) => {
+							setFormOptions({ ...formOptions, contentWidth: option });
+						}}
 						title='Ширина контента'
 					/>
 					<div className={styles.bottomContainer}>

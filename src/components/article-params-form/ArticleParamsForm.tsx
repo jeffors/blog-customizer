@@ -6,7 +6,7 @@ import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
 
 import styles from './ArticleParamsForm.module.scss';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import {
 	defaultArticleState,
@@ -28,10 +28,22 @@ export const ArticleParamsForm = ({
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [formOptions, setFormOptions] =
 		useState<ArticleStateType>(defaultArticleState);
+	const rootRef = useRef<HTMLDivElement>(null);
 
-	function handleClick() {
-		setIsOpen(!isOpen);
-	}
+	useEffect(() => {
+		const handleClick = (event: MouseEvent) => {
+			const { target } = event;
+			if (target instanceof Node && !rootRef.current?.contains(target)) {
+				setIsOpen(false);
+			}
+		};
+
+		window.addEventListener('mousedown', handleClick);
+
+		return () => {
+			window.removeEventListener('mousedown', handleClick);
+		};
+	}, [isOpen]);
 
 	function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -50,14 +62,15 @@ export const ArticleParamsForm = ({
 			<ArrowButton
 				isOpen={isOpen}
 				onClick={() => {
-					handleClick();
+					setIsOpen(!isOpen);
 				}}
 			/>
 			<aside
 				className={clsx({
 					[styles.container]: true,
 					[styles.container_open]: isOpen,
-				})}>
+				})}
+				ref={rootRef}>
 				<form
 					className={styles.form}
 					onReset={handleReset}

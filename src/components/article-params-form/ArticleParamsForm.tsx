@@ -18,13 +18,31 @@ import {
 	ArticleStateType,
 } from 'src/constants/articleProps';
 
-export const ArticleParamsForm = () => {
+type ArticleParamsFormProps = {
+	setArticleOptions: (options: ArticleStateType) => void;
+};
+
+export const ArticleParamsForm = ({
+	setArticleOptions,
+}: ArticleParamsFormProps) => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [formOptions, setFormOptions] =
 		useState<ArticleStateType>(defaultArticleState);
 
 	function handleClick() {
 		setIsOpen(!isOpen);
+	}
+
+	function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		setArticleOptions(formOptions);
+		setIsOpen(false);
+	}
+
+	function handleReset() {
+		setFormOptions(defaultArticleState);
+		setArticleOptions(defaultArticleState);
+		setIsOpen(false);
 	}
 
 	return (
@@ -40,7 +58,10 @@ export const ArticleParamsForm = () => {
 					[styles.container]: true,
 					[styles.container_open]: isOpen,
 				})}>
-				<form className={styles.form}>
+				<form
+					className={styles.form}
+					onReset={handleReset}
+					onSubmit={handleSubmit}>
 					<Text weight={800} size={31} uppercase>
 						Задайте параметры
 					</Text>

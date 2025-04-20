@@ -75,7 +75,7 @@ export const ArticleParamsForm = ({
 					className={styles.form}
 					onReset={handleReset}
 					onSubmit={handleSubmit}>
-					<Text weight={800} size={31} uppercase>
+					<Text as={'h2'} weight={800} size={31} uppercase>
 						Задайте параметры
 					</Text>
 					<Select

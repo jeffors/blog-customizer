@@ -31,18 +31,20 @@ export const ArticleParamsForm = ({
 	const rootRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const handleClick = (event: MouseEvent) => {
-			const { target } = event;
-			if (target instanceof Node && !rootRef.current?.contains(target)) {
-				setIsOpen(false);
-			}
-		};
+		if (isOpen) {
+			const handleClick = (event: MouseEvent) => {
+				const { target } = event;
+				if (target instanceof Node && !rootRef.current?.contains(target)) {
+					setIsOpen(false);
+				}
+			};
 
-		window.addEventListener('mousedown', handleClick);
+			window.addEventListener('mousedown', handleClick);
 
-		return () => {
-			window.removeEventListener('mousedown', handleClick);
-		};
+			return () => {
+				window.removeEventListener('mousedown', handleClick);
+			};
+		}
 	}, [isOpen]);
 
 	function handleSubmit(event: React.FormEvent<HTMLFormElement>) {

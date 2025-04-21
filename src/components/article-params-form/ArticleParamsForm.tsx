@@ -6,7 +6,7 @@ import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
 
 import styles from './ArticleParamsForm.module.scss';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import clsx from 'clsx';
 import {
 	defaultArticleState,
@@ -17,6 +17,7 @@ import {
 	contentWidthArr,
 	ArticleStateType,
 } from 'src/constants/articleProps';
+import { useOutsideMenuClick } from './hooks/useOutsideMenuClick';
 
 type ArticleParamsFormProps = {
 	setArticleOptions: (options: ArticleStateType) => void;
@@ -30,22 +31,11 @@ export const ArticleParamsForm = ({
 		useState<ArticleStateType>(defaultArticleState);
 	const rootRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		if (isMenuOpen) {
-			const handleClick = (event: MouseEvent) => {
-				const { target } = event;
-				if (target instanceof Node && !rootRef.current?.contains(target)) {
-					setIsMenuOpen(false);
-				}
-			};
-
-			document.addEventListener('mousedown', handleClick);
-
-			return () => {
-				document.removeEventListener('mousedown', handleClick);
-			};
-		}
-	}, [isMenuOpen]);
+	useOutsideMenuClick({
+		isMenuOpen,
+		onClick: () => setIsMenuOpen(false),
+		rootRef,
+	});
 
 	function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
